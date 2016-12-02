@@ -7,6 +7,13 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.util.EntityUtils;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -168,18 +175,19 @@ public class SerieController {
 	}
     
 	private String getURL(String url) throws IOException {
-        final HttpResponse httpResponse = getResponse(url);
-        if (httpResponse.getStatusLine().getStatusCode() != 200) {
-            throw new MarvelRestException(httpResponse);
-        }
-        return EntityUtils.toString(httpResponse.getEntity());
-    }
-	
-    private HttpResponse getResponse(String url) throws IOException {
-        if (proxy == null) {
-            return Request.Get(url).execute().returnResponse();
-        } else {
-            return Request.Get(url).viaProxy(new HttpHost(proxy.getHost(), proxy.getPort())).execute().returnResponse();
-        }
+		
+		Client client = ClientBuilder.newClient();
+		WebTarget webTarget =  client.target(url);
+		
+		Response response = webTarget				
+				.request()	
+				.accept(MediaType.APPLICATION_JSON)
+				.get();
+		
+        if (response.getStatus() != 200) {
+            throw new MarvelRestException(response);
+        }      
+        
+        return response.readEntity(String.class);
     }
 }

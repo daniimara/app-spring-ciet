@@ -2,7 +2,7 @@ package br.com.treinamento;
 
 public class Constants {
 
-	public static final String ID_SERIE = "725";
+	public static final Integer ID_SERIE = 725;
 
 	
 }

@@ -31,47 +31,38 @@ import br.com.treinamento.dojo.model.MarvelCharacter;
 import br.com.treinamento.dojo.model.Comic;
 import br.com.treinamento.dojo.model.Creator;
 import br.com.treinamento.dojo.model.Story;
+import br.com.treinamento.dojo.model.URLFactory;
+
+import br.com.treinamento.dojo.parameter.SeriesParameters;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(TestConfig.class)
 public class IntegradoSeriesTest {
 	
+	private URLFactory urlFactory;
+	private String publicKey = "4f8c462b9fdb1e043d0d907ce4164374";
+	private String privateKey = "52c4cd408bb0c1d27e4e98b741853f30f29d9115";
+	
 	private WebTarget webTarget;
 	private Client client;
-	private Criptografia criptografia;
 	private ObjectMapper objectMapper;
-	private String timeStamp;
-	private String publicKey;
-	private String privateKey;
-	private String host;
 	
 	@Before
 	public void setUp() throws NoSuchAlgorithmException{
 		
-		timeStamp = "1";
-		publicKey = "4f8c462b9fdb1e043d0d907ce4164374";
-		privateKey = "52c4cd408bb0c1d27e4e98b741853f30f29d9115";
-		host = "http://gateway.marvel.com/v1/public/series";
-		
 		client = ClientBuilder.newClient();
-		criptografia = new Criptografia();
 		
 		objectMapper = new ObjectMapper();
-		SimpleModule module = new SimpleModule("CollectionURIDeserializerModule",
-                new Version(1, 0, 0, null, null, null));
+		SimpleModule module = new SimpleModule("CollectionURIDeserializerModule", new Version(1, 0, 0, null, null, null));
         module.addDeserializer(CollectionURI.class, new CollectionURIDeserializer());
         objectMapper.registerModule(module);
 	}
 	
     @Test
     public void testGetSeries() throws Exception {
-        //Result<Series> series = restClient.getSeries();
-        //assertThat(series.getData()).isNotNull();
     	
-    	webTarget = client.target(host)
-				.queryParam("apikey", publicKey)
-				.queryParam("ts", timeStamp)
-				.queryParam("hash", criptografia.MD5(timeStamp+privateKey+publicKey));
+    	urlFactory = new URLFactory(privateKey, publicKey);
+    	webTarget = client.target(urlFactory.getSeriesURL());
 		
 		Response response = webTarget				
 				.request()	
@@ -91,11 +82,8 @@ public class IntegradoSeriesTest {
     @Test
     public void testGetSeriesBySeriesId() throws Exception {
 
-		webTarget = client.target(host + "/")
-				.path(Constants.ID_SERIE)
-				.queryParam("apikey", publicKey)
-				.queryParam("ts", timeStamp)
-				.queryParam("hash", criptografia.MD5(timeStamp+privateKey+publicKey));
+    	urlFactory = new URLFactory(privateKey, publicKey);
+    	webTarget = client.target(urlFactory.getSeriesURL(Constants.ID_SERIE));
 		
 		Response response = webTarget				
 				.request()	
@@ -103,11 +91,9 @@ public class IntegradoSeriesTest {
 				.get();
 		
 		String json = response.readEntity(String.class);
-		//System.out.println("json\n" + json + "\n");
 		
 		Gson gson = new Gson();		
 		Result resposta = gson.fromJson(json, Result.class);
-		//System.out.println("resposta\n" + resposta.toString() + "\n");
         
         JavaType javaType = objectMapper.getTypeFactory().constructParametricType(Result.class, Serie.class);
 		Result<Serie> mappedResult = objectMapper.readValue(json, javaType);
@@ -121,15 +107,10 @@ public class IntegradoSeriesTest {
 
     @Test
     public void testGetSeriesCharacters() throws Exception {
-        //Result<MarvelCharacter> characters = restClient.getSeriesCharacters(new SeriesParametersBuilder(FIFTEEN_LOVE_SERIES_ID).create());
-        //assertThat(characters.getData()).isNotNull();
     	
-    	webTarget = client.target(host + "/")
-				.path(Constants.ID_SERIE)
-				.path("characters")
-				.queryParam("apikey", publicKey)
-				.queryParam("ts", timeStamp)
-				.queryParam("hash", criptografia.MD5(timeStamp+privateKey+publicKey));
+    	SeriesParameters seriesParameters = new SeriesParameters(Constants.ID_SERIE);    	
+    	urlFactory = new URLFactory(privateKey, publicKey);
+    	webTarget = client.target(urlFactory.getSeriesCharactersURL(seriesParameters));
 		
 		Response response = webTarget				
 				.request()	
@@ -137,11 +118,9 @@ public class IntegradoSeriesTest {
 				.get();
 		
 		String json = response.readEntity(String.class);
-		//System.out.println("json\n" + json + "\n");
 		
 		Gson gson = new Gson();		
 		Result resposta = gson.fromJson(json, Result.class);
-		//System.out.println("resposta\n" + resposta.toString() + "\n");
 		
 		JavaType javaType = objectMapper.getTypeFactory().constructParametricType(Result.class, MarvelCharacter.class);
 		Result<MarvelCharacter> mappedResult = objectMapper.readValue(json, javaType);
@@ -153,15 +132,10 @@ public class IntegradoSeriesTest {
 
     @Test
     public void testGetSeriesComics() throws Exception {
-        //Result<Comic> comics = restClient.getSeriesComics(new SeriesParametersBuilder(FIFTEEN_LOVE_SERIES_ID).create());
-        //assertThat(comics.getData()).isNotNull();
     	
-    	webTarget = client.target(host + "/")
-				.path(Constants.ID_SERIE)
-				.path("comics")
-				.queryParam("apikey", publicKey)
-				.queryParam("ts", timeStamp)
-				.queryParam("hash", criptografia.MD5(timeStamp+privateKey+publicKey));
+    	SeriesParameters seriesParameters = new SeriesParameters(Constants.ID_SERIE);    	
+    	urlFactory = new URLFactory(privateKey, publicKey);
+    	webTarget = client.target(urlFactory.getSeriesComicsURL(seriesParameters));
 		
 		Response response = webTarget				
 				.request()	
@@ -169,11 +143,9 @@ public class IntegradoSeriesTest {
 				.get();
 		
 		String json = response.readEntity(String.class);
-		//System.out.println("json\n" + json + "\n");
 		
 		Gson gson = new Gson();		
 		Result resposta = gson.fromJson(json, Result.class);
-		//System.out.println("resposta\n" + resposta.toString() + "\n");
 		
 		JavaType javaType = objectMapper.getTypeFactory().constructParametricType(Result.class, Comic.class);
 		Result<Comic> mappedResult = objectMapper.readValue(json, javaType);
@@ -185,15 +157,10 @@ public class IntegradoSeriesTest {
 
     @Test
     public void testGetSeriesCreators() throws Exception {
-        //Result<Creator> creators = restClient.getSeriesCreators(new SeriesParametersBuilder(FIFTEEN_LOVE_SERIES_ID).create());
-        //assertThat(creators.getData()).isNotNull();
-    	
-    	webTarget = client.target(host + "/")
-				.path(Constants.ID_SERIE)
-				.path("creators")
-				.queryParam("apikey", publicKey)
-				.queryParam("ts", timeStamp)
-				.queryParam("hash", criptografia.MD5(timeStamp+privateKey+publicKey));
+        
+    	SeriesParameters seriesParameters = new SeriesParameters(Constants.ID_SERIE);    	
+    	urlFactory = new URLFactory(privateKey, publicKey);
+    	webTarget = client.target(urlFactory.getSeriesCreatorsURL(seriesParameters));
 		
 		Response response = webTarget				
 				.request()	
@@ -201,11 +168,9 @@ public class IntegradoSeriesTest {
 				.get();
 		
 		String json = response.readEntity(String.class);
-		//System.out.println("json\n" + json + "\n");
 		
 		Gson gson = new Gson();		
 		Result resposta = gson.fromJson(json, Result.class);
-		//System.out.println("resposta\n" + resposta.toString() + "\n");
 		
 		JavaType javaType = objectMapper.getTypeFactory().constructParametricType(Result.class, Creator.class);
 		Result<Creator> mappedResult = objectMapper.readValue(json, javaType);
@@ -217,15 +182,10 @@ public class IntegradoSeriesTest {
 
     @Test
     public void testGetSeriesStories() throws Exception {
-        //Result<Story> stories = restClient.getSeriesStories(new SeriesParametersBuilder(FIFTEEN_LOVE_SERIES_ID).create());
-        //assertThat(stories.getData()).isNotNull();
     	
-    	webTarget = client.target(host + "/")
-				.path(Constants.ID_SERIE)
-				.path("stories")
-				.queryParam("apikey", publicKey)
-				.queryParam("ts", timeStamp)
-				.queryParam("hash", criptografia.MD5(timeStamp+privateKey+publicKey));
+    	SeriesParameters seriesParameters = new SeriesParameters(Constants.ID_SERIE);    	
+    	urlFactory = new URLFactory(privateKey, publicKey);
+    	webTarget = client.target(urlFactory.getSeriesStoriesURL(seriesParameters));
 		
 		Response response = webTarget				
 				.request()	
@@ -233,11 +193,9 @@ public class IntegradoSeriesTest {
 				.get();
 		
 		String json = response.readEntity(String.class);
-		//System.out.println("json\n" + json + "\n");
 		
 		Gson gson = new Gson();		
 		Result resposta = gson.fromJson(json, Result.class);
-		//System.out.println("resposta\n" + resposta.toString() + "\n");
 		
 		JavaType javaType = objectMapper.getTypeFactory().constructParametricType(Result.class, Story.class);
 		Result<Story> mappedResult = objectMapper.readValue(json, javaType);

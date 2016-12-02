@@ -1,16 +1,15 @@
 package br.com.treinamento.dojo.exception;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.util.EntityUtils;
+import javax.ws.rs.core.Response;
 
 import java.io.IOException;
 
 public class MarvelRestException extends RuntimeException {
 
-    private final HttpResponse response;
+    private final Response response;
 
-    public MarvelRestException(HttpResponse response) throws IOException {
-        super(EntityUtils.toString(response.getEntity()));
+    public MarvelRestException(Response response) throws IOException {
+        super("Erro na consulta da API.");
         this.response = response;
     }
 }
