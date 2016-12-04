@@ -37,7 +37,7 @@ import br.com.treinamento.dojo.parameter.SeriesParameters;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(TestConfig.class)
-public class SeriesTest {
+public class SerieTest {
 	
 	private URLFactory urlFactory;
 	private String publicKey = "4f8c462b9fdb1e043d0d907ce4164374";
