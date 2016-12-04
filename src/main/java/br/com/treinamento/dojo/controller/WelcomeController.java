@@ -1,11 +1,5 @@
 package br.com.treinamento.dojo.controller;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,10 +9,58 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class WelcomeController {
 
-	@RequestMapping(value = "/helloworld", method = RequestMethod.GET)
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ResponseEntity<String> helloWorld() {
-
-		return new ResponseEntity<String>("hello world", HttpStatus.OK);
+		
+		String message = 
+			"<br>" +
+				"<div style='text-align:center;'>"
+					+ "<h2>Spring MVC</h2>"
+					+ "<h2>APIs Marvel</h2>"
+					+ "<h3>Series</h3>"
+					+ "<br />"
+					+ "<a href=\"/app-spring-ciet/v1/serie\">Serie</a>"
+					+ "<br />"
+					+ "<br />"
+					+ "<a href=\"/app-spring-ciet/v1/series\">Series</a>"
+					+ "<br />"
+					+ "<br />"
+					+ "<a href=\"/app-spring-ciet/v1/series/725\">Serie 725</a>"
+					+ "<br />"
+					+ "<br />"
+					+ "<a href=\"/app-spring-ciet/v1/series/725/characters\">Serie 725 characters</a>"
+					+ "<br />"
+					+ "<br />"
+					+ "<a href=\"/app-spring-ciet/v1/series/725/comics\">Serie 725 comics</a>"
+					+ "<br />"
+					+ "<br />"
+					+ "<a href=\"/app-spring-ciet/v1/series/725/creators\">Serie 725 creators</a>"
+					+ "<br />"
+					+ "<br />"
+					+ "<a href=\"/app-spring-ciet/v1/series/725/creators\">Serie 725 stories</a>"
+					+ "<br />"
+					+ "<br />"
+					+ "<h3>Characters</h3>"
+					+ "<br />"
+					+ "<a href=\"/app-spring-ciet/v1/characters\">Characters</a>"
+					+ "<br />"
+					+ "<br />"
+					+ "<h3>Comics</h3>"
+					+ "<br />"
+					+ "<a href=\"/app-spring-ciet/v1/comics\">Comics</a>"
+					+ "<br />"
+					+ "<br />"
+					+ "<h3>User</h3>"
+					+ "<br />"
+					+ "<a href=\"/app-spring-ciet/user/\">Users</a>"
+					+ "<br />"
+					+ "<br />"
+					+ "<a href=\"/app-spring-ciet/user/1/\">User 1</a>"
+					+ ""
+				+ "</div>"
+			+ "<br />"
+			+ "<br />";
+		
+		return new ResponseEntity<String>(message, HttpStatus.OK);
 	}
-
 }

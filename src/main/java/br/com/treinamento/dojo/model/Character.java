@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class MarvelCharacter {
+public class Character {
 
     private int id;
     private String name;

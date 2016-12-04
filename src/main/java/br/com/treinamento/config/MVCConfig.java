@@ -19,6 +19,4 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
 		bean.setSuffix(".jsp");
 		return bean;
 	}
-
-
 }

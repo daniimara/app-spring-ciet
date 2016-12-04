@@ -13,6 +13,9 @@ public class SerieImplService implements SerieService {
 	
 	@Autowired
 	private ArrayList<Serie> series;
+	
+	@Autowired
+	private Serie serie;
 
 	public ArrayList<Serie> getSeries() {
 		return series;
@@ -27,6 +30,11 @@ public class SerieImplService implements SerieService {
 		return this.getSeries();
 	}
 
+	@Override
+	public Serie get() {
+		return serie;
+	}
+	
 	@Override
 	public Serie get(Integer id) {
 		for (Serie item : getSeries()) {

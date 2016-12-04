@@ -20,7 +20,7 @@ import br.com.treinamento.dojo.service.SerieService;
 @EnableAutoConfiguration
 @ComponentScan("br.com.treinamento.dojo")
 public class AppConfig {
-
+	
 	@Bean
 	@Scope(value = "singleton")
 	public Map<String, Object> getDb() {
@@ -43,7 +43,7 @@ public class AppConfig {
 		
 		Serie serie1 = new Serie();
 		serie1.setId(1);
-		serie1.setTitle("Teste Serie 1");
+		serie1.setTitle("Test Serie 1");
 		serie1.setDescription("description");
 		serie1.setResourceURI("resourceURI");
 		serie1.setType("type");
@@ -60,14 +60,12 @@ public class AppConfig {
 		serie1.setCreators(null);
 		serie1.setNext(null);
 		serie1.setPrevious(null);
-		
-		
 		series.add(serie1);
 		
-		/*Serie serie2 = new Serie();
+		Serie serie2 = new Serie();
 		serie2.setId(2);
-		serie2.setTitle("Teste Serie 2");
-		series.add(serie2);*/
+		serie2.setTitle("Test Serie 2");
+		series.add(serie2);
 				
 		return series;
 	}
